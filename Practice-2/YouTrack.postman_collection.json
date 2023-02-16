@@ -271,10 +271,9 @@
 							"pm.test(\"Status code is 200\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
 							"});\r",
-							"pm.test(\"Test summary and description contekst\", function () {\r",
+							"pm.test(\"Test State\", function () {\r",
 							"    var jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData.summary).to.eql(pm.environment.get(\"summary\"));\r",
-							"    pm.expect(jsonData.description).to.eql(pm.environment.get(\"description\"));\r",
+							"    pm.expect(jsonData.State).to.eql(pm.environment.get(\"Submitted\"));\r",
 							"});"
 						],
 						"type": "text/javascript"
