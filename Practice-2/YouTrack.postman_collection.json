@@ -1,0 +1,405 @@
+{
+	"info": {
+		"_postman_id": "5112d4b6-ec43-4f08-a012-d69591a3c5e6",
+		"name": "YouTrack",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25778319"
+	},
+	"item": [
+		{
+			"name": "Test",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(210);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}",
+					"host": [
+						"{{URL}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pojects",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Set new variable\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.environment.set(\"project_id\", jsonData[1].id);\r",
+							"    pm.expect(jsonData[1].id).to.eql(pm.environment.get(\"project_id\"));\r",
+							"\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer perm:amFuZS5kb2U=.UkVTVCBBUEk=.wcKuAok8cHmAtzjA6xlc4BrB4hleaX"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}api/admin/projects?fields=id,name,shortName",
+					"host": [
+						"{{URL}}api"
+					],
+					"path": [
+						"admin",
+						"projects"
+					],
+					"query": [
+						{
+							"key": "fields",
+							"value": "id,name,shortName"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Issue",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var rnd = Math.random();\r",
+							"pm.environment.set(\"summary\", \"west\" + rnd);\r",
+							"pm.environment.set(\"description\", \"ten\" + rnd);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Set new variable\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.environment.set(\"issue_id\", jsonData.id);\r",
+							"    pm.expect(jsonData.id).to.eql(pm.environment.get(\"issue_id\"));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"project\": {\n        \"id\": \"{{project_id}}\"\n    },\n    \"summary\": \"{{summary}}\",\n    \"description\": \"{{description}}\"\n}"
+				},
+				"url": {
+					"raw": "{{URL}}api/issues",
+					"host": [
+						"{{URL}}api"
+					],
+					"path": [
+						"issues"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Issue_1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Test summary and description contekst\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.summary).to.eql(pm.environment.get(\"summary\"));\r",
+							"    pm.expect(jsonData.description).to.eql(pm.environment.get(\"description\"));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Cache-Control",
+						"value": "no-cache"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}api/issues/{{issue_id}}?fields=$type,id,summary,description,customFields($type,id,projectCustomField($type,id,field($type,id,name)),value($type,avatarUrl,buildLink,color(id),fullName,id,isResolved,localizedName,login,minutes,name,presentation,text))",
+					"host": [
+						"{{URL}}api"
+					],
+					"path": [
+						"issues",
+						"{{issue_id}}"
+					],
+					"query": [
+						{
+							"key": "fields",
+							"value": "$type,id,summary,description,customFields($type,id,projectCustomField($type,id,field($type,id,name)),value($type,avatarUrl,buildLink,color(id),fullName,id,isResolved,localizedName,login,minutes,name,presentation,text))"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Issue_custom field",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Test new custom and priority\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.customFields[0].value.name).to.eql(\"Major\");\r",
+							"    pm.expect(jsonData.customFields[3].value.login).to.eql(pm.environment.get(\"Login\"));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"customFields\": [\n{\"name\":\"Assignee\",\"$type\":\"SingleUserIssueCustomField\",\"value\":{\"login\":\"{{Login}}\"}},\n{\"name\":\"Priority\",\"$type\":\"SingleEnumIssueCustomField\",\"value\":{\"name\":\"Major\"}}\n] }"
+				},
+				"url": {
+					"raw": "{{URL}}api/issues/{{issue_id}}?fields=customFields(id,name,value(avatarUrl,buildLink,color(id),fullName,id,isResolved,localizedName,login,minutes,name,presentation,text))",
+					"host": [
+						"{{URL}}api"
+					],
+					"path": [
+						"issues",
+						"{{issue_id}}"
+					],
+					"query": [
+						{
+							"key": "fields",
+							"value": "customFields(id,name,value(avatarUrl,buildLink,color(id),fullName,id,isResolved,localizedName,login,minutes,name,presentation,text))"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Issue_State",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Test summary and description contekst\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.summary).to.eql(pm.environment.get(\"summary\"));\r",
+							"    pm.expect(jsonData.description).to.eql(pm.environment.get(\"description\"));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}api/issues/{{issue_id}}?fields=$type,id,summary,description,customFields($type,id,projectCustomField($type,id,field($type,id,name)),value($type,avatarUrl,buildLink,color(id),fullName,id,isResolved,localizedName,login,minutes,name,presentation,text))",
+					"host": [
+						"{{URL}}api"
+					],
+					"path": [
+						"issues",
+						"{{issue_id}}"
+					],
+					"query": [
+						{
+							"key": "fields",
+							"value": "$type,id,summary,description,customFields($type,id,projectCustomField($type,id,field($type,id,name)),value($type,avatarUrl,buildLink,color(id),fullName,id,isResolved,localizedName,login,minutes,name,presentation,text))"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Issue_State_In Progress",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Test new State\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.customFields[2].value.name).to.eql(\"In Progress\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"customFields\": [\n{\"name\":\"State\",\"$type\":\"StateIssueCustomField\",\"value\":{\"name\":\"In Progress\"}}\n] }"
+				},
+				"url": {
+					"raw": "{{URL}}api/issues/{{issue_id}}?fields=customFields(id,name,value(avatarUrl,buildLink,color(id),fullName,id,isResolved,localizedName,login,minutes,name,presentation,text))",
+					"host": [
+						"{{URL}}api"
+					],
+					"path": [
+						"issues",
+						"{{issue_id}}"
+					],
+					"query": [
+						{
+							"key": "fields",
+							"value": "customFields(id,name,value(avatarUrl,buildLink,color(id),fullName,id,isResolved,localizedName,login,minutes,name,presentation,text))"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "{{Password}}",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "{{Login}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
