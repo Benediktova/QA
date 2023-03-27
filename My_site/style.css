@@ -1,0 +1,88 @@
+body {
+  	background: url("background9.jpg") center;
+	min-height: 100%;
+	background-size: cover;
+	background-color: #ffffff;
+	
+	padding: 0px 30px;
+	font-size: 18px;
+  	font-family: "Bookman Old Style", "Footlight MT Light", "Times New Roman", Cambria, sans-serif;
+ 	color: #000000;
+	text-align: center;
+}	
+
+h1{
+	font-size: 150%;
+	font-weight: 700;
+	text-align: center;
+	margin: 50px;
+}
+
+h2 {
+	font-size: 120%;
+	margin: 40px;
+	text-align: center;
+}
+
+h3 {
+	font-size: 120%px;
+	margin: 40px;
+	text-align: center;
+}
+
+h4 {
+	font-size: 130%px;
+	margin: 40px;
+	text-align: center;
+}
+
+.block-navigation {
+	padding: 5px;
+	font-weight: 700;
+}
+
+nav, a {
+	font-family: "Bookman Old Style", "Footlight MT Light", "Times New Roman", Cambria, sans-serif;
+	font-size: 105%;
+	color: #000000;
+	font-weight: 600;
+	text-align: left;
+	margin: 1% 5%;
+}
+
+li {
+	margin: 15px 50px;
+}
+
+
+.avatar {
+	border-radius: 10%;
+	text-align: center;
+	margin: 10px;
+}
+
+.about_text {
+	text-align: justify;
+	padding: 0px 30px;
+	margin: 40px 100px;
+	border: 2px solid #000;
+	border-radius: 20px;
+	padding: 15px;
+	background-color: #202020;
+	color: #e0e0e0;
+}
+
+.video {
+	text-align: center;
+	margin: 1% 5%;
+}
+
+footer {
+	text-align: center;
+	margin: 80px;
+}
+
+.contacts {
+	margin: 20px;
+	text-align: center;	
+}
